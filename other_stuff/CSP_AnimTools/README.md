@@ -5,7 +5,7 @@ Clip Studio Paint Auto Action Set to get around CSP's jankiness when it comes to
 [Download](https://github.com/Ghalban/the_pit/blob/main/other_stuff/CSP_AnimTools/AnimTools.laf), drag, and drop AnimTools.laf to your CSP Auto Actions panel.
 
 # New Nested Animation Folder
-Creates a nested animation folder template with Three lineart layers designated to different tasks: 
+Creates a nested animation folder template with Three layers designated to different tasks: 
 1. **LN - Folder for Lineart**
 		This folder is set as a *reference layer* to work with the paint bucket tool on **FILL** layer.
 		**LN layers are intended to be drawn on with only Black (0,0,0) brush color.**
