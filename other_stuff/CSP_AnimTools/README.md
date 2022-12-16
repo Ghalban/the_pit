@@ -1,3 +1,6 @@
+# How To Install:
+Download and drag and drop AnimTools.laf to your CSP Auto Actions panel.
+
 # New Nested Animation Folder
 Creates a nested animation folder template with Three  lineart layers designated to different tasks: 
 1. **LN - Folder for Lineart**
