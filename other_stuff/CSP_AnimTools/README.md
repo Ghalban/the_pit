@@ -2,7 +2,7 @@
 Clip Studio Paint Auto Action Set to get around CSP's jankiness when it comes to its animation tools. Inspired by OpenToonz.
 
 # How To Install:
-Download and drag and drop AnimTools.laf to your CSP Auto Actions panel.
+[Download](https://github.com/Ghalban/the_pit/blob/main/other_stuff/CSP_AnimTools/AnimTools.laf) and drag and drop AnimTools.laf to your CSP Auto Actions panel.
 
 # New Nested Animation Folder
 Creates a nested animation folder template with Three lineart layers designated to different tasks: 
