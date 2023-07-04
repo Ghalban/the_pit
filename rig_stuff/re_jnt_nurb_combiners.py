@@ -88,26 +88,24 @@ def jnt_chain_distr_on_crv(j="", crv="", rebuild_chain=False):
         cmds.connectAttr(f"{poc_info}.position", f"{joint}.translate")
 
     if rebuild_chain is True:
-        for i in joints:
-            poc_info = f"{i}_pointOnCurveInfo"
-            cmds.disconnectAttr(f"{poc_info}.position", f"{i}.translate")
+        for joint in joints:
+            poc_info = f"{joint}_pointOnCurveInfo"
+            cmds.disconnectAttr(f"{poc_info}.position", f"{joint}.translate")
             cmds.delete(poc_info)
 
         for index, joint in enumerate(joints):  # TODO: this assumes X twist axis, what if its Y or Z?
             nxt = index + 1
+            world_up = cmds.group(em=True, name=f"{joint}_worldUp")
+            cmds.delete(cmds.parentConstraint(joint, world_up, mo=0))
             if nxt < len(joints):
                 nxt_joint = joints[nxt]
-                if nxt == len(joints) - 1:
-                    cmds.delete(cmds.aimConstraint(nxt_joint, joint, aim=[1, 0, 0], u=[0, 0, -1]))
-                else:
-                    cmds.delete(cmds.aimConstraint(nxt_joint, joint, aim=[1, 0, 0], u=[0, 0, 1]))
+                cmds.delete(cmds.aimConstraint(nxt_joint, joint, aim=[1, 0, 0], u=[0, 0, 1], wut="objectrotation",
+                                               wu=[0, 0, -1], wuo=world_up))
                 cmds.makeIdentity(joint, apply=True)
-                if joint is not joints[0]:
-                    cmds.setAttr(f"{joint}.jointOrientX", 0)
-                    cmds.setAttr(f"{joint}.jointOrientZ", 0)
                 cmds.parent(nxt_joint, joint)
                 if nxt == len(joints) - 1:
                     clear_orients(nxt_joint)
+            cmds.delete(world_up)
 
 
 def jnt_chain_to_surface(j, name="", width=4):
@@ -312,7 +310,6 @@ def setup_rail_spine(j="", name="", neck="", stretch=True, width=4):
     cmds.parent(f"{name}Rail_0", grp)
     for g in ctrl_grps:
         cmds.parent(g, grp)
-
 
 
 jnt = 'C_Spine_0'
