@@ -262,7 +262,7 @@ def setup_rail_spine(j="", name="", neck="", stretch=True, width=4):
     cmds.skinCluster(f"{start_jnt}_IK", f"{mid_jnt}_IK", f"{end_jnt}_IK", f"{curve}", n=f"{curve}Shape_skinCluster")
     cmds.skinCluster(f"{start_jnt}_IK", f"{mid_jnt}_IK", f"{end_jnt}_IK", f"{surface}", n=f"{surface}_skinCluster")
 
-    # TODO: Check if do not touch group exists
+    # TODO: Check if do not touch group exists by setting as parameter
     hide = cmds.group(curve, surface, ik, name="DO_NOT_TOUCH")
     cmds.setAttr(f"{curve}.visibility", 0)
     cmds.setAttr(f"{surface}.visibility", 0)
@@ -276,7 +276,7 @@ def setup_rail_spine(j="", name="", neck="", stretch=True, width=4):
     for g in ctrl_grps:
         cmds.parent(g, grp)
     for g in grps:
-        g = cmds.listRelatives(g, parent=True)
+        g = cmds.listRelatives(g, parent=True)[0]
         cmds.parent(g, hide)
         cmds.setAttr(f"{g}.visibility", 0)
 
