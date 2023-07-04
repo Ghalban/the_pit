@@ -193,6 +193,21 @@ def setup_ik_spline(jnt_a, jnt_b, name, crv):
 
 # TODO: in future, move this to a class
 def setup_rail_spine(j="", name="", neck="", stretch=True, width=4):
+    """
+    Sets up a rail spine as demonstrated by Perry Leijten
+
+    https://www.perryleijten.com/en/works/railSplineRD
+
+    Args:
+        j: top spine joint in hierarchy. Best if its children are only the joints you want on the surface
+        name: name of the chain
+        neck: specify if there is a neck joint
+        stretch: if you would like to add stretch. Currently, only game engine friendly stretch via translate
+        width: width of the resulting ribbon curve
+
+    Returns:
+        None
+    """
     cmds.select(cl=True)
     ribbon = setup_ribbon_base(j=j, name=name, follow_jnts=True, width=width)
     grps = ribbon[0]
@@ -230,12 +245,12 @@ def setup_rail_spine(j="", name="", neck="", stretch=True, width=4):
         if joint is not end_jnt:
             rail_jnt = cmds.joint(name=f"{name}Rail_{index}")
             cmds.delete(cmds.pointConstraint(grps[index], rail_jnt, mo=0))
-            cmds.delete(cmds.aimConstraint(grps[index+1], rail_jnt, aim=[1,0,0], u=[0,0,1], wut="objectrotation",
-                                           wu=[0,0,1], wuo=grps[index]))
+            cmds.delete(cmds.aimConstraint(grps[index + 1], rail_jnt, aim=[1, 0, 0], u=[0, 0, 1], wut="objectrotation",
+                                           wu=[0, 0, 1], wuo=grps[index]))
             cmds.makeIdentity(rail_jnt, apply=True)
             cmds.pointConstraint(grps[index], rail_jnt, mo=0)
             cmds.aimConstraint(grps[index + 1], rail_jnt, aim=[1, 0, 0], u=[0, 0, 1], wut="objectrotation",
-                                           wu=[0, 0, 1], wuo=grps[index])
+                               wu=[0, 0, 1], wuo=grps[index])
         else:  # End of spine connects to neck, so make it follow the orient of chest control
             rail_jnt = cmds.joint(name=f"{name}Rail_{index}")
             cmds.pointConstraint(grps[index], rail_jnt, mo=0)
