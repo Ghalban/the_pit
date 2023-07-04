@@ -229,9 +229,13 @@ def setup_rail_spine(j="", name="", neck="", stretch=True, width=4):
         cmds.setAttr(f"{joint}.drawStyle", 2)
         if joint is not end_jnt:
             rail_jnt = cmds.joint(name=f"{name}Rail_{index}")
-            cmds.delete(cmds.parentConstraint(grps[index], rail_jnt, mo=0))
+            cmds.delete(cmds.pointConstraint(grps[index], rail_jnt, mo=0))
+            cmds.delete(cmds.aimConstraint(grps[index+1], rail_jnt, aim=[1,0,0], u=[0,0,1], wut="objectrotation",
+                                           wu=[0,0,1], wuo=grps[index]))
             cmds.makeIdentity(rail_jnt, apply=True)
-            cmds.parentConstraint(grps[index], rail_jnt, mo=0)
+            cmds.pointConstraint(grps[index], rail_jnt, mo=0)
+            cmds.aimConstraint(grps[index + 1], rail_jnt, aim=[1, 0, 0], u=[0, 0, 1], wut="objectrotation",
+                                           wu=[0, 0, 1], wuo=grps[index])
         else:  # End of spine connects to neck, so make it follow the orient of chest control
             rail_jnt = cmds.joint(name=f"{name}Rail_{index}")
             cmds.pointConstraint(grps[index], rail_jnt, mo=0)
