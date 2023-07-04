@@ -141,6 +141,19 @@ def jnt_chain_to_surface(j, name="", width=4):
 
 
 def setup_ribbon_base(j="", name="", follow_jnts=True, width=4, loc_shape=False):
+    """
+    Makes a ribbon from a chain of joints, and distributes transform nodes to follow the ribbon using uv pin
+
+    Args:
+        j: top joint in hierarchy. Best if its children are only the joints you want on the surface
+        name: name of the chain
+        follow_jnts: True if you want the groups to more closely match the source joint chain's behavior
+        width: width of the resulting ribbon curve
+        loc_shape: whether you want to see locator shape where the transform groups are made
+
+    Returns:
+        [grps, ribbon[0], ribbon[1]]: list of transform nodes, the ribbon's shape, and the curve the joints following
+    """
     grps = []
     ribbon = jnt_chain_to_surface(j=j, name=name, width=width)
     shape = ribbon[0]
@@ -282,10 +295,15 @@ def setup_rail_spine(j="", name="", neck="", stretch=True, width=4):
     cmds.skinCluster(f"{start_jnt}_IK", f"{mid_jnt}_IK", f"{end_jnt}_IK", f"{surface}", n=f"{surface}_skinCluster")
 
     # TODO: Check if do not touch group exists by setting as parameter
-    hide = cmds.group(curve, surface, ik, name="DO_NOT_TOUCH")
-    cmds.setAttr(f"{curve}.visibility", 0)
-    cmds.setAttr(f"{surface}.visibility", 0)
+    hide = cmds.group(em=True, name="DO_NOT_TOUCH", w=True)
     cmds.setAttr(f"{hide}.visibility", 0)
+    for obj in [curve, cmds.listRelatives(surface, parent=True)[0], ik]:
+        cmds.parent(obj, hide)
+        cmds.setAttr(f"{obj}.visibility", 0)
+    for g in grps:
+        g = cmds.listRelatives(g, parent=True)[0]
+        cmds.parent(g, hide)
+        cmds.setAttr(f"{g}.visibility", 0)
 
     # TODO: Lock and hide attrs to finalize cleanup
     if neck != "":
@@ -294,10 +312,7 @@ def setup_rail_spine(j="", name="", neck="", stretch=True, width=4):
     cmds.parent(f"{name}Rail_0", grp)
     for g in ctrl_grps:
         cmds.parent(g, grp)
-    for g in grps:
-        g = cmds.listRelatives(g, parent=True)[0]
-        cmds.parent(g, hide)
-        cmds.setAttr(f"{g}.visibility", 0)
+
 
 
 jnt = 'C_Spine_0'
